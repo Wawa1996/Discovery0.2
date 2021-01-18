@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: io.netty:netty-transport-native-epoll:linux-x86_64:4.1.0.CR3">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/Library/apache-maven-3.6.3/repository/anialy-repo/io/netty/netty-transport-native-epoll/4.1.0.CR3/netty-transport-native-epoll-4.1.0.CR3-linux-x86_64.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$USER_HOME$/Library/apache-maven-3.6.3/repository/anialy-repo/io/netty/netty-transport-native-epoll/4.1.0.CR3/netty-transport-native-epoll-4.1.0.CR3-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$USER_HOME$/Library/apache-maven-3.6.3/repository/anialy-repo/io/netty/netty-transport-native-epoll/4.1.0.CR3/netty-transport-native-epoll-4.1.0.CR3-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
