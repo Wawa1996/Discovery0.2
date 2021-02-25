@@ -1,8 +1,12 @@
 import Config.Discoveryconfig;
 import Utils.*;
+import Utils.bytes.Bytes32;
 import Utils.bytes.BytesValue;
 import com.google.common.annotations.VisibleForTesting;
 import cryto.SECP256K1;
+import io.libp2p.core.crypto.KEY_TYPE;
+import io.libp2p.core.crypto.KeyKt;
+import io.libp2p.core.crypto.PrivKey;
 import io.vertx.core.Vertx;
 import io.vertx.core.datagram.DatagramPacket;
 import io.vertx.core.datagram.DatagramSocket;
@@ -16,7 +20,7 @@ import peer.DiscoveryPeer;
 import peer.Endpoint;
 import peer.Peer;
 import peer.PeerTable;
-
+import org.apache.tuweni.bytes.Bytes;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.*;
@@ -41,7 +45,6 @@ public class DiscoveryController {
     private Vertx vertx;
     Endpoint mynode;
     List<DiscoveryPeer> bootnodes;
-    Discoveryconfig discoveryconfig = new Discoveryconfig();
     private static SECP256K1.KeyPair keyPair ;
     private static final long REFRESH_CHECK_INTERVAL_MILLIS = MILLISECONDS.convert(30, SECONDS);
     private final long tableRefreshIntervalMs = MILLISECONDS.convert(30, TimeUnit.MINUTES);
@@ -49,6 +52,7 @@ public class DiscoveryController {
     private final Map<BytesValue, PeerInteractionState> inflightInteractions =
             new ConcurrentHashMap<>();
     private final Subscribers<Consumer<PeerDiscoveryEvent.PeerBondedEvent>> peerBondedObservers = new Subscribers<>();
+
 
     public void start(boolean isbootnode) throws DecoderException {
         final String host = "127.0.0.1";
@@ -59,22 +63,22 @@ public class DiscoveryController {
                     SECP256K1.PrivateKey.create(
                             new BigInteger("c85ef7d79691fe79573b1a7064c19c1a9819ebdbd1faaab1a8ec92344438aaf4", 16));
             keyPair = SECP256K1.KeyPair.create(privateKey);
+            myid = keyPair.getPublicKey().getEncodedBytes();
+            System.out.println("长度"+bytesToHexFun3(keyPair.getPrivateKey().getEncoded()).length());
             myself = Discoveryconfig.getBootnode().get(0);
-            myid = myself.getId();
             mynode = myself.getEndpoint();
         }else {
             port = 10004;
             OptionalInt tcp = OptionalInt.of(10005);
             keyPair= SECP256K1.KeyPair.generate();
             myid = keyPair.getPublicKey().getEncodedBytes();
+//            final PrivKey privKey = KeyKt.generateKeyPair(KEY_TYPE.SECP256K1).component1();
+//            myid = BytesValue.wrap(privKey.publicKey().bytes());
             mynode = new Endpoint(host, port, tcp);
             myself = new DiscoveryPeer(myid, mynode);
-
         }
         peerTable = new PeerTable(myid, 10);
-
         bootnodes = Discoveryconfig.getBootnode();
-
         this.vertx = Vertx.vertx();
         vertx.createDatagramSocket().listen(mynode.getUdpPort(),mynode.getHost(), ar -> {
             if (!ar.succeeded()) {
@@ -98,8 +102,6 @@ public class DiscoveryController {
                     forEach(node -> bond(node, true));
 
         }
-
-
     }
 
     @VisibleForTesting
@@ -132,15 +134,7 @@ public class DiscoveryController {
 
     public Packet sendPacket(final DiscoveryPeer peer, final PacketType type, final PacketData data) {
         final Packet packet = Packet.create(type, data, keyPair);
-//        log.info("Packet = {}",packet.toString());
-//        log.info(
-//                ">>> Sending {} discovery packet to {} ({}): {}",
-//                type,
-//                peer.getEndpoint(),
-//                peer.getId().slice(0, 16),
-//                packet);
 
-        // Update the lastContacted timestamp on the peer if the dispatch succeeds.
         socket.send(
                 packet.encode(),
                 peer.getEndpoint().getUdpPort(),
@@ -476,6 +470,14 @@ public class DiscoveryController {
         interaction.cancelTimers();
         inflightInteractions.remove(packet.getNodeId());
         return Optional.of(interaction);
+    }
+    public static String bytesToHexFun3(byte[] bytes) {
+        StringBuilder buf = new StringBuilder(bytes.length * 2);
+        for(byte b : bytes) { // 使用String的format方法进行转换
+            buf.append(String.format("%02x", new Integer(b & 0xff)));
+        }
+
+        return buf.toString();
     }
 }
 

@@ -119,9 +119,9 @@ public class DefaultPeer extends DefaultPeerId implements Peer {
      */
     public DefaultPeer(final BytesValue id, final Endpoint endpoint) {
         super(id);
-        checkArgument(
-                id != null && id.size() == PEER_ID_SIZE, "id must be non-null and exactly 64 bytes long");
-        checkArgument(endpoint != null, "endpoint cannot be null");
+//        checkArgument(
+//                id != null && id.size() == PEER_ID_SIZE, "id must be non-null and exactly 64 bytes long");
+//        checkArgument(endpoint != null, "endpoint cannot be null");
         this.endpoint = endpoint;
     }
 

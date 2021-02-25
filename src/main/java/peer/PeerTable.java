@@ -1,6 +1,5 @@
 package peer;
 
-import Utils.PeerDiscoveryStatus;
 import Utils.bytes.BytesValue;
 import com.google.common.hash.BloomFilter;
 import cryto.Hash;
@@ -25,9 +24,7 @@ public class PeerTable {
     private final Bucket[] table;
     private final BytesValue keccak256;
     private final int maxEntriesCnt;
-    private int tempsize;
     private final Map<BytesValue, Integer> distanceCache;
-    private BloomFilter<BytesValue> idBloom;
     private int evictionCnt = 0;
 
     /**
@@ -61,12 +58,6 @@ public class PeerTable {
      * @return The stored representation.
      */
     public Optional<DiscoveryPeer> get(final PeerId peer) {
-//        if (!idBloom.mightContain(peer.getId())) {
-//
-//
-//            log.info("idBloom dont have this peer");
-//            return Optional.empty();
-//        }
         final int distance = distanceFrom(peer);
         return table[distance].getAndTouch(peer.getId());
     }
@@ -89,6 +80,7 @@ public class PeerTable {
      * @return An object indicating the outcome of the operation.
      */
     public AddResult tryAdd(final DiscoveryPeer peer) {
+
         final BytesValue id = peer.getId();
         final int distance = distanceFrom(peer);
 
@@ -112,10 +104,6 @@ public class PeerTable {
         }
 
         if (!res.isPresent()) {
-
-//            idBloom.put(id);
-//            log.info("添加的结果为 = {} ",idBloom.mightContain(id));
-
             distanceCache.put(id, distance);
             log.info("size = {}",distanceCache.size());
             return AddResult.added();
@@ -128,23 +116,20 @@ public class PeerTable {
      * Evicts a peer from the underlying table.
      *
      * @param peer The peer to evict.
-     * @return Whether the peer existed, and hence the eviction took place.
      */
-    public boolean evict(final PeerId peer) {
+    public void evict(final PeerId peer) {
         final BytesValue id = peer.getId();
         final int distance = distanceFrom(peer);
         distanceCache.remove(id);
 
         final boolean evicted = table[distance].evict(peer);
         evictionCnt += evicted ? 1 : 0;
-        tempsize -= evicted ? 1:0;
 
         // Trigger the bloom filter regeneration if needed.
         if (evictionCnt >= BLOOM_FILTER_REGENERATION_THRESHOLD) {
             ForkJoinPool.commonPool().execute(this::buildBloomFilter);
         }
 
-        return evicted;
     }
 
     private void buildBloomFilter() {
@@ -152,7 +137,6 @@ public class PeerTable {
                 BloomFilter.create((id, val) -> val.putBytes(id.extractArray()), maxEntriesCnt, 0.001);
         getAllPeers().stream().map(Peer::getId).forEach(bf::put);
         this.evictionCnt = 0;
-        this.idBloom = bf;
     }
 
     /**

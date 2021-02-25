@@ -19,6 +19,14 @@
             </plugin>
         </plugins>
     </build>
+
+    <properties>
+        <kotlin.version>1.4.0</kotlin.version>
+        <libp2p.version>0.6.1-RELEASE</libp2p.version>
+        <protobuf.version>3.13.0</protobuf.version>
+        <bouncycastle.version>1.66</bouncycastle.version>
+        <netty.version>4.1.51.Final</netty.version>
+    </properties>
     <dependencies>
     <dependency>
         <groupId>io.vertx</groupId>
@@ -53,11 +61,6 @@
             <version>1.2.0</version>
             <type>pom</type>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>org.hyperledger.besu</groupId>-->
-<!--            <artifactId>plugin-api</artifactId>-->
-<!--            <version>1.5.2-SNAPSHOT</version>-->
-<!--        </dependency>-->
         <dependency>
             <groupId>org.wildfly.swarm</groupId>
             <artifactId>vertx</artifactId>
@@ -103,6 +106,24 @@
             <artifactId>junit</artifactId>
             <version>RELEASE</version>
             <scope>test</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/io.libp2p/jvm-libp2p-minimal -->
+        <dependency>
+            <groupId>io.libp2p</groupId>
+            <artifactId>jvm-libp2p-minimal</artifactId>
+            <version>0.5.1-RELEASE</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-stdlib -->
+        <dependency>
+            <groupId>org.jetbrains.kotlin</groupId>
+            <artifactId>kotlin-stdlib</artifactId>
+            <version>1.4.30</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.tuweni</groupId>
+            <artifactId>tuweni-bytes</artifactId>
+            <version>1.1.0</version>
         </dependency>
         <dependency>
             <groupId>org.junit.jupiter</groupId>

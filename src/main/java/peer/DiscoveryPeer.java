@@ -29,6 +29,7 @@ public class DiscoveryPeer extends DefaultPeer {
     private long lastContacted = 0;
     private long lastSeen = 0;
 
+
     public DiscoveryPeer(
             final BytesValue id, final String host, final int udpPort, final int tcpPort) {
         super(id, host, udpPort, tcpPort);

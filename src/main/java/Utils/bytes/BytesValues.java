@@ -130,59 +130,6 @@ public abstract class BytesValues {
     }
 
     /**
-     * Extracts the int value corresponding to the provide bytes, which must be 4 bytes or less.
-     *
-     * <p>This is the inverse operation to {@link #toMinimalBytes(long)} (when the argument of said
-     * method fits an int).
-     *
-     * @param value The value from which to extract the value as an int. If must be 4 bytes or less.
-     *     If it is strictly less than 4 bytes, this behave as if the value was padded with 0 on the
-     *     left to fit 4 bytes.
-     * @return The extracted int value.
-     * @throws IllegalArgumentException if the value has strictly more than 4 bytes.
-     */
-    public static int extractInt(final BytesValue value) {
-        final int size = value.size();
-        checkArgument(size <= 4, "Cannot extract an int from a value of size %s > 4", size);
-
-        if (size == 0) return 0;
-
-        int res = 0;
-        int shift = 0;
-        for (int i = 0; i < size; i++) {
-            res |= (value.get(size - i - 1) & 0xFF) << shift;
-            shift += 8;
-        }
-        return res;
-    }
-
-    /**
-     * Extracts the long value corresponding to the provide bytes, which must be 8 bytes or less.
-     *
-     * <p>This is the inverse operation to {@link #toMinimalBytes(long)}.
-     *
-     * @param value The value from which to extract the value as a long. If must be 8 bytes or less.
-     *     If it is strictly less than 8 bytes, this behave as if the value was padded with 0 on the
-     *     left to fit 8 bytes.
-     * @return The extracted long value.
-     * @throws IllegalArgumentException if the value has strictly more than 8 bytes.
-     */
-    public static long extractLong(final BytesValue value) {
-        final int size = value.size();
-        checkArgument(size <= 8, "Cannot extract a long from a value of size %s > 8", size);
-
-        if (size == 0) return 0;
-
-        long res = 0;
-        int shift = 0;
-        for (int i = 0; i < size; i++) {
-            res |= ((long) value.get(size - i - 1) & 0xFF) << shift;
-            shift += 8;
-        }
-        return res;
-    }
-
-    /**
      * Creates a newly allocated value containing the concatenation of the values provided.
      *
      * @param values The value to copy/concatenate.

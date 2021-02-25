@@ -15,6 +15,7 @@ public interface Peer extends PeerId{
      */
     static BytesValue randomId() {
         final byte[] id = new byte[64];
+//        final byte[] id = new byte[34];
         new SecureRandom().nextBytes(id);
         return BytesValue.wrap(id);
     }
