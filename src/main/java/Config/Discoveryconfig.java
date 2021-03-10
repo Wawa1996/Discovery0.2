@@ -17,7 +17,7 @@ public class Discoveryconfig {
     public static List<DiscoveryPeer> getBootnode() throws DecoderException {
 
         //逻辑是先连接config里面节点再进行发现
-        String id = "0947751e3022ecf3016be03ec77ab0ce3c2662b4843898cb068d74f698ccc8ad75aa17564ae80a20bb044ee7a6d903e8e8df624b089c95d66a0570f051e5a05b";
+        String id  = "08021221027611680ca65e8fb7214a31b6ce6fcd8e6fe6a5f4d784dc6601dfe2bb9f8c96c2";
         byte [] peerid= Hex.decodeHex(id);
         OptionalInt tcpport = OptionalInt.of(30000);
         Endpoint endpoint = new Endpoint("127.0.0.1",10000,tcpport);

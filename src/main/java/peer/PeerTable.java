@@ -5,6 +5,7 @@ import com.google.common.hash.BloomFilter;
 import cryto.Hash;
 import lombok.extern.slf4j.Slf4j;
 
+import java.sql.SQLOutput;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ForkJoinPool;
@@ -86,6 +87,7 @@ public class PeerTable {
 
         // Safeguard against adding ourselves to the peer table.
         if (distance == 0) {
+            System.out.println("不能添加自己");
             return AddResult.self();
         }
 
@@ -105,7 +107,8 @@ public class PeerTable {
 
         if (!res.isPresent()) {
             distanceCache.put(id, distance);
-            log.info("size = {}",distanceCache.size());
+            log.info("distanceCache.size = {}",distanceCache.size());
+            log.info("add suss");
             return AddResult.added();
         }
 

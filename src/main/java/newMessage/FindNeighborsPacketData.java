@@ -18,7 +18,7 @@ public class FindNeighborsPacketData implements PacketData {
     private final long expiration;
 
     private FindNeighborsPacketData(final BytesValue target, final long expiration) {
-        checkArgument(target != null && target.size() == TARGET_SIZE, "target must be a valid node id");
+        checkArgument(target != null && target.size() == 37, "target must be a valid node id");
         checkArgument(expiration >= 0, "expiration must be positive");
 
         this.target = target;
