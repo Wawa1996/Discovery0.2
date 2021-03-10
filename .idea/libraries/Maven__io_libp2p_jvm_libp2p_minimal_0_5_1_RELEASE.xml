@@ -8,7 +8,6 @@
     </JAVADOC>
     <SOURCES>
       <root url="jar://$USER_HOME$/Library/apache-maven-3.6.3/repository/anialy-repo/io/libp2p/jvm-libp2p-minimal/0.5.1-RELEASE/jvm-libp2p-minimal-0.5.1-RELEASE-sources.jar!/" />
-      <root url="jar://$USER_HOME$/Library/apache-maven-3.6.3/repository/anialy-repo/io/libp2p/jvm-libp2p-minimal/0.5.1-RELEASE/jvm-libp2p-minimal-0.5.1-RELEASE.jar!/" />
     </SOURCES>
   </library>
 </component>
