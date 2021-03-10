@@ -2,7 +2,6 @@ import Config.Discoveryconfig;
 import Utils.*;
 import Utils.bytes.BytesValue;
 import com.google.common.annotations.VisibleForTesting;
-import cryto.SECP256K1;
 import io.libp2p.core.crypto.KEY_TYPE;
 import io.libp2p.core.crypto.KeyKt;
 import io.libp2p.core.crypto.PrivKey;
